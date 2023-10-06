@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'poppins';
+    src: url('./assets/Poppins/Poppins-Medium.ttf') format('truetype');
+}
+
+
+*{
+    font-family: 'poppins'
+}
+
+.login-container{
+    background-color: #F0EFF0;
+}
