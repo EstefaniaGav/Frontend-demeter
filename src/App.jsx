@@ -6,7 +6,7 @@ import { Modal } from "./components/Modal.jsx"
 import SupplierView from "./components/SupplierView.jsx"
 import Shopping from "./pages/Shopping.jsx"
 import M_Shopping from "./components/M_Shopping.jsx"
-import Carrito from './components/Carrito.jsx'
+import ShoppingView from "./components/ShoppingView.jsx"
 import './App.css'
 
 function App() {
@@ -23,7 +23,9 @@ function App() {
         <Route path="/supplierV/:id" element={<SupplierView />} />
         <Route path="/shopping" element={<Shopping/>}/>
         <Route path='/shoppingM' element={<M_Shopping/>} />
-        <Route path='/factura' element={<Carrito/>} />
+        <Route path='/shoppingV/:id' element={<ShoppingView/>} />
+
+
 
 
 

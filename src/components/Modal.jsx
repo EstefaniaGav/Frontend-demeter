@@ -8,7 +8,7 @@ export const Modal = () => {
   const [formData, setFormData] = useState({
     Nombre: "",
     Telefono: "",
-    Cedula: "", // Deja el campo en blanco
+    Cedula: "", 
     Ciudad: "",
     Email: "",
   });

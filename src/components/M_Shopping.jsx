@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa'; // Importa los iconos de react-icons
 import Menu from '../components/Menu';
 import { useFetch } from '../hooks/useFetch';
+import axios from 'axios';
 
 function M_Shopping({ handleSubmit, errors, id }) {
+  
   const { data: proveedores, loading: loadingProveedores } = useFetch({ url: 'http://localhost:4003/api/supplier' });
   const { data: insumos, loading: loadingInsumos } = useFetch({ url: 'http://localhost:4003/api/detail-shopping' });
 
@@ -35,6 +37,7 @@ function M_Shopping({ handleSubmit, errors, id }) {
     }
   };
 
+
   const handleIncrement = () => {
     setCantidad(cantidad + 1);
   };
@@ -50,6 +53,7 @@ function M_Shopping({ handleSubmit, errors, id }) {
   }, [proveedores]);
 
   useEffect(() => {
+    
     console.log('Insumos:', insumos);
   }, [insumos]);
 
@@ -58,6 +62,25 @@ function M_Shopping({ handleSubmit, errors, id }) {
   const formattedTime = `${currentDate.getHours()}:${(currentDate.getMinutes() < 10 ? '0' : '') + currentDate.getMinutes()}`;
   const fechaActual = `${formattedDate} ${formattedTime}`;
 
+  const handleConfirmarCompra = async () => {
+    if (selectedProveedor && insumosTable.length > 0) {
+      const compraData = {
+        Fecha_Compra: new Date().toISOString(),
+        ID_PROVEEDOR: selectedProveedor,
+        Valor_Compra: insumosTable.reduce((total, insumo) => total + insumo.total, 0),
+        Detalles: insumosTable,
+      };
+      await axios.post("http://localhost:4003/api/shopping", compraData)
+      // history.push({
+      //   pathname: '/shopping',
+      //   state: { nuevaCompra: compraData },
+      // });
+      window.location.href ="http://localhost:5173/shopping"
+    } else {
+      alert('Completa todos los campos correctamente.');
+    }
+  };
+  
   return (
     <div className="bg-gray-200 min-h-screen flex">
       <div className="w-64">
@@ -153,19 +176,19 @@ function M_Shopping({ handleSubmit, errors, id }) {
             <table className="mt-6 w-full">
               <thead>
                 <tr>
-                  <th className="py-2">Insumo</th>
-                  <th className="py-2">Cantidad</th>
-                  <th className="py-2">Valor Unitario</th>
-                  <th className="py-2">Total</th>
+                  <th className="w-1/4 text-sm border border-gray-600 p-2">Insumo</th>
+                  <th className="w-1/4 text-sm border border-gray-600 p-2">Cantidad</th>
+                  <th className="w-1/4 text-sm border border-gray-600 p-2">Valor Unitario</th>
+                  <th className="w-1/4 text-sm border border-gray-600 p-2">Total</th>
                 </tr>
               </thead>
               <tbody>
                 {insumosTable.map((insumo, index) => (
                   <tr key={index}>
-                    <td className="py-2">{insumo.insumo}</td>
-                    <td className="py-2">{insumo.cantidad}</td>
-                    <td className="py-2">{insumo.valor}</td>
-                    <td className="py-2">{insumo.total}</td>
+                    <td className="w-1/4 border border-gray-600 p-2">{insumo.insumo}</td>
+                    <td className="w-1/4 border border-gray-600 p-2">{insumo.cantidad}</td>
+                    <td className="w-1/4 border border-gray-600 p-2">{insumo.valor}</td>
+                    <td className="w-1/4 border border-gray-600 p-2">{insumo.total}</td>
                   </tr>
                 ))}
               </tbody>
@@ -173,8 +196,8 @@ function M_Shopping({ handleSubmit, errors, id }) {
             
             <button
               type="button"
-              onClick={handleAgregarInsumo}
-              className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600"
+              onClick={handleConfirmarCompra}
+              className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 mt-5"
             >
               confirmar compra
            </button>

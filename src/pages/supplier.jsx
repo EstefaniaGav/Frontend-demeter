@@ -3,7 +3,7 @@ import { useFetch } from '../hooks/useFetch';
 import { Link } from 'react-router-dom';
 import Menu from '../components/Menu';
 import { BiSolidEdit } from 'react-icons/bi';
-import { AiOutlineEye } from 'react-icons/ai';
+import { AiOutlineEye, AiFillDelete } from 'react-icons/ai';
 import { BsToggleOff } from 'react-icons/bs';
 
 function Supplier() {
@@ -76,6 +76,19 @@ function Supplier() {
   useEffect(() => {
     handleSearch();
   }, [searchQuery]);
+
+  const handleDeleteClick = async (id) => {
+    try {
+      await fetch(`http://localhost:4003/api/supplier/${id}`, {
+        method: 'DELETE',
+      });
+
+      const deleteProviders = providers.filter(provider => provider.ID_PROVEEDOR !== id);
+      setProviders(deleteProviders);
+    } catch (error) {
+      console.error('Error al eliminar el proveedor:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen flex">
@@ -151,6 +164,12 @@ function Supplier() {
                         >
                           <BsToggleOff className="text-2xl mx-2" />
                         </span>
+                        <span
+                          className={`cursor-pointer text-red-600`}
+                          onClick={() => handleDeleteClick(provider.ID_PROVEEDOR)}
+                        >
+                          <AiFillDelete className="text-2xl mx-2" />
+                      </span>
                       </div>
                     </td>
                   </tr>
